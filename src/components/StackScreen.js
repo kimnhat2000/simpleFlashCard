@@ -20,18 +20,18 @@ class StackScreen extends React.Component{
     }
 
     onFormSubmit = (e) => {
+        e.preventDefault()
         const {editInput} = this.state
         const nameCheck = this.props.stacks.map(s => s.name.toLowerCase())
-        const stacksToCheck = this.props.stacks.filter(s=>s.id !== this.state.selectedStack.id)
-        const editNameCheck = stacksToCheck.map(s => s.name.toLowerCase())
-        e.preventDefault()
+        const stacksToCheck = editInput && this.props.stacks.filter(s=>s.id !== this.state.selectedStack.id)
+        const editNameCheck = editInput && stacksToCheck.map(s => s.name.toLowerCase())
         if(!this.state.stackName && !editInput){
             this.setState({error:'please enter stack name', okButton:true})
             return;
         }
         if(!editInput){
             if(nameCheck.includes(this.state.stackName.toLowerCase())){
-                this.setState({error:'this stack is already existed', okButton:true, stackName:''})
+                this.setState({error:'this stack already exists', okButton:true, stackName:''})
                 return;
             }else
             this.props.addStack({ name: this.state.stackName })
@@ -40,7 +40,7 @@ class StackScreen extends React.Component{
         //edit stack
         }else
             if (editNameCheck.includes(this.state.selectedStack.name.toLowerCase())){
-            this.setState({error:'this stack is already existed', okButton:true})
+            this.setState({error:'this stack already exists', okButton:true})
             return;
         }
         this.props.editStack(this.state.selectedStack)

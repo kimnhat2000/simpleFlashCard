@@ -12,7 +12,6 @@ class CardScreen extends React.Component{
     constructor(props){
         super(props);
         const {findStack} = this.props
-        console.log(findStack[0].cards)
         this.state={
             flip:false,
             cards:findStack[0].cards ? findStack[0].cards : [],
@@ -20,7 +19,7 @@ class CardScreen extends React.Component{
             showForm:false,
             cardToEdit:'',
             warning:false,
-            selectedCard:''
+            selectedCard:'',
         }
     }
 
@@ -88,6 +87,7 @@ class CardScreen extends React.Component{
                 {showForm &&
                     <Form
                         createCard={(card) => this.onFormSubmit(card)}
+                        cards={cards}
                     />
                 }
 
@@ -95,6 +95,7 @@ class CardScreen extends React.Component{
                     <Form
                         editCard={cardToEdit}
                         editCardSubmit={(editedCard) => this.onSubmitEditCard(editedCard)}
+                        cards={cards}
                     />
                 }
 
