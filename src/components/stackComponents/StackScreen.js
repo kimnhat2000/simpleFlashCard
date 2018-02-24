@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { addStack, removeStack, editStack, selectStackId } from '../Redux/actions/stackAction';
+import { addStack, removeStack, editStack, selectStackId } from '../../Redux/actions/stackAction';
 import StackList from './StackList';
-import Warning from './Warning';
+import Warning from '../Warning';
 
 class StackScreen extends React.Component{
     constructor(props){

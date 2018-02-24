@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-const CardList = ({ cards, cardClick, deleteCard, editCard }) => {
+const CardList = ({ cards, cardClick, deleteCard, editCard, formShow }) => {
     const list = cards.map((c,i) => (
         <div key={i}>
             <div  
@@ -11,7 +11,7 @@ const CardList = ({ cards, cardClick, deleteCard, editCard }) => {
             </div>
             <div>
                 <button onClick={() => deleteCard(c)}>-</button>
-                <button onClick={() => editCard(c)}>edit</button>
+                <button onClick={() => editCard(c)}>{formShow ? 'close' : 'edit'}</button>
             </div>
         </div>
     ))

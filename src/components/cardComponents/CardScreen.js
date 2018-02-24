@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import uuid from 'uuid';
 
 import CardList from './CardList';
-import { addCardToStack } from '../Redux/actions/stackAction';
-import Warning from './Warning';
+import { addCardToStack } from '../../Redux/actions/stackAction';
+import Warning from '../Warning';
 import Form from './Form';
 
 class CardScreen extends React.Component{
@@ -37,7 +37,7 @@ class CardScreen extends React.Component{
     }
 
     onEditCard = (card) => {
-        this.setState({cardToEdit:card, editForm:true, showForm:false})
+        this.setState({cardToEdit:card, editForm: !this.state.editForm, showForm:false})
     }
 
     onDeleteCard = (card) => {
@@ -82,7 +82,7 @@ class CardScreen extends React.Component{
                 <h1>this is the CardScreen</h1>
                 <button onClick={this.test}>test</button>
 
-                <button onClick={()=>this.setState({showForm: !this.state.showForm, editForm:false})}>add cards</button>
+                <button onClick={()=>this.setState({showForm: !this.state.showForm, editForm:false})}>{this.state.showForm ? 'close form' : 'add card'}</button>
 
                 {showForm &&
                     <Form
@@ -116,6 +116,7 @@ class CardScreen extends React.Component{
                         flipped={this.state.flip}
                         deleteCard={this.onDeleteCard}
                         editCard={this.onEditCard}
+                        formShow={this.state.editForm}
                     />
                 </div>
             </div>

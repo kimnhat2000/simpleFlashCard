@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import StackScreen from '../components/StackScreen';
-import CardScreen from '../components/CardScreen';
-import SelectCards from '../components/SelectCards';
+import StackScreen from '../components/stackComponents/StackScreen';
+import CardScreen from '../components/cardComponents/CardScreen';
+import SelectCards from '../components/selectCardComponents/SelectCards';
 
 const Routers = () => (
     <BrowserRouter>
