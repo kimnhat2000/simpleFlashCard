@@ -6,40 +6,19 @@ import uuid from 'uuid';
 import CardList from './CardList';
 import { addCardToStack } from '../Redux/actions/stackAction';
 import Warning from './Warning';
+import Form from './Form';
 
 class CardScreen extends React.Component{
     constructor(props){
         super(props);
+        const {findStack} = this.props
+        console.log(findStack[0].cards)
         this.state={
             flip:false,
-            cards:[
-                // {
-                //     stackId:this.props.match.params.id,
-                //     id: uuid(),
-                //     name:'card1',
-                //     description:'this is card 1 description',
-                //     flipped:false
-
-                // },
-                // {
-                //     stackId: this.props.match.params.id,
-                //     id: uuid(),
-                //     name: 'card2',
-                //     description: 'this is card 2 description',
-                //     flipped: false
-                // },
-                // {
-                //     stackId: this.props.match.params.id,
-                //     id: uuid(),
-                //     name: 'card3',
-                //     description: 'this is card 3 description',
-                //     flipped: false
-                // }
-            ],
+            cards:findStack[0].cards ? findStack[0].cards : [],
             editForm:false,
             showForm:false,
-            cardName:'',
-            cardDescription:'',
+            cardToEdit:'',
             warning:false,
             selectedCard:''
         }
@@ -47,7 +26,6 @@ class CardScreen extends React.Component{
 
     componentDidUpdate = (prevProps, prevState) => {
         if(prevState.cards.length !== this.state.cards.length){
-            console.log(this.props.selectedStackId)
             this.props.addCardToStack(this.props.selectedStackId, this.state.cards)
             return;
         }
@@ -60,7 +38,7 @@ class CardScreen extends React.Component{
     }
 
     onEditCard = (card) => {
-        console.log(card)
+        this.setState({cardToEdit:card, editForm:true, showForm:false})
     }
 
     onDeleteCard = (card) => {
@@ -74,49 +52,50 @@ class CardScreen extends React.Component{
             const card = this.state.selectedCard
             const cards = this.state.cards.filter(c => c.id !== card.id)
             this.setState({cards, warning:false})
+            this.props.addCardToStack(this.props.selectedStackId, this.state.cards)
             return;
         }
         this.setState({warning:false})
         return
     }
 
-    onAddCardSubmit = (e) => {
-        e.preventDefault();
-        const { cardName, cardDescription } = this.state;
+    onFormSubmit = (card) => {
         const stackId = this.props.match.params.id;
-        const newCard = { stackId, id: uuid(), name: cardName, description: cardDescription }
-        this.setState({ cards: [...this.state.cards, newCard] })
+        const newCard = { stackId, id: uuid(), ...card }
+        this.setState({ cards: [...this.state.cards, newCard], showForm:false })
     }
 
+    onSubmitEditCard = (editedCard) => {
+        const cards = this.state.cards.map(c => c.id === editedCard.id ? c = editedCard : c);
+        this.setState({editForm:false, cards})
+        this.props.addCardToStack(this.props.selectedStackId, cards)
+    }
 
     test=()=>{
-        console.log(this.props.selectedStackId)
         console.log(this.props.findStack[0].cards)
+        // console.log(this.state.cards)
     }
 
     render(){
-        const { cards, flip, showForm, warning, selectedCard } = this.state
+        const { cards, flip, showForm, warning, selectedCard, cardToEdit, editForm } = this.state
         return(
             <div>
                 <h1>this is the CardScreen</h1>
                 <button onClick={this.test}>test</button>
 
-                <button onClick={()=>this.setState({showForm: !this.state.showForm})}>add cards</button>
+                <button onClick={()=>this.setState({showForm: !this.state.showForm, editForm:false})}>add cards</button>
 
                 {showForm &&
-                    <form onSubmit={this.onAddCardSubmit}>
-                        <input
-                            placeholder='add card name'
-                            value={this.state.cardName}
-                            onChange={(e) => this.setState({ cardName: e.target.value })}
-                        />
-                        <textarea
-                            rows='10' cols='50'
-                            value={this.state.cardDescription}
-                            onChange={e => this.setState({ cardDescription: e.target.value })}
-                        />
-                        <button>add card</button>
-                    </form>
+                    <Form
+                        createCard={(card) => this.onFormSubmit(card)}
+                    />
+                }
+
+                {editForm &&
+                    <Form
+                        editCard={cardToEdit}
+                        editCardSubmit={(editedCard) => this.onSubmitEditCard(editedCard)}
+                    />
                 }
 
                 <button><Link to='/'>to stackScreen</Link></button>

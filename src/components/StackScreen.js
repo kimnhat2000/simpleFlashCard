@@ -13,20 +13,34 @@ class StackScreen extends React.Component{
             stackName:'',
             selectedStack:null,
             warning:false,
-            editInput:false
+            editInput:false,
+            error:'',
+            okButton:false
         }
-    }
-
-    selectedStack = (selectedStack) => {
-        this.setState({selectedStack})
     }
 
     onFormSubmit = (e) => {
         const {editInput} = this.state
+        const nameCheck = this.props.stacks.map(s => s.name.toLowerCase())
+        const stacksToCheck = this.props.stacks.filter(s=>s.id !== this.state.selectedStack.id)
+        const editNameCheck = stacksToCheck.map(s => s.name.toLowerCase())
         e.preventDefault()
+        if(!this.state.stackName && !editInput){
+            this.setState({error:'please enter stack name', okButton:true})
+            return;
+        }
         if(!editInput){
+            if(nameCheck.includes(this.state.stackName.toLowerCase())){
+                this.setState({error:'this stack is already existed', okButton:true, stackName:''})
+                return;
+            }else
             this.props.addStack({ name: this.state.stackName })
             this.setState({ stackName: '' })
+            return;
+        //edit stack
+        }else
+            if (editNameCheck.includes(this.state.selectedStack.name.toLowerCase())){
+            this.setState({error:'this stack is already existed', okButton:true})
             return;
         }
         this.props.editStack(this.state.selectedStack)
@@ -34,13 +48,12 @@ class StackScreen extends React.Component{
         return;
     }
 
-    onDeleteStack = () => {
-        this.setState({warning:true})
+    onDeleteStack = (s) => {
+        this.setState({ warning: true, selectedStack: s})
     }
 
-    onEditStack = () => {
-        this.setState({editInput:true})
-        console.log('edit this stack')
+    onEditStack = (s) => {
+        this.setState({ editInput: true, selectedStack: s})
     }
 
     onOpenStack = (stack) => {
@@ -83,16 +96,19 @@ class StackScreen extends React.Component{
             }
 
                 <form onSubmit={this.onFormSubmit}>
+                    <h4>{this.state.error}</h4>
                     <input
                         placeholder='enter stack name'
                         value={editInput ? selectedStack.name : stackName}
                         onChange={e => editInput ? this.setState({selectedStack:{...selectedStack, name:e.target.value}}) : this.setState({ stackName: e.target.value })}
                     />
                     <button>{editInput ? 'change name' : '+'}</button>
+                    {this.state.okButton &&
+                        <button onClick={()=>this.setState({error:'', okButton:false})}>OK</button>
+                    }
                 </form>
 
                 <StackList
-                    selectedStack={(stack)=>this.selectedStack(stack)}
                     deleteStack={this.onDeleteStack}
                     editStack={this.onEditStack}
                     openStack={this.onOpenStack}
