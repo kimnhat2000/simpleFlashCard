@@ -7,6 +7,7 @@ import CardList from './CardList';
 import { addCardToStack } from '../../Redux/actions/stackAction';
 import Warning from '../Warning';
 import Form from './Form';
+import Filter from '../Filter';
 
 class CardScreen extends React.Component{
     constructor(props){
@@ -100,6 +101,8 @@ class CardScreen extends React.Component{
                 }
 
                 <button><Link to='/'>to stackScreen</Link></button>
+
+                <Filter/>
 
                 {warning &&
                     <Warning

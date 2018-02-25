@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import { filter } from '../../tools/tools';
+
 const StackList = ({ stacks, deleteStack, editStack, openStack }) => {
 
     const list = stacks.map((s,i) => (
@@ -22,7 +24,7 @@ const StackList = ({ stacks, deleteStack, editStack, openStack }) => {
 }
 
 const mapStateToProps = (state) => ({
-    stacks:state.stacks.stacks
+    stacks: filter(state.stacks.stacks, state.filter.text, state.filter.sortByStackName)
 })
 
 export default connect(mapStateToProps, null)(StackList)

@@ -34,6 +34,30 @@ export const stackReducer = (state = defaultStackState, action) => {
     }
 };
 
+//filter reducer
+const defaultFilterReducer = { text: '', sortByStackName: false, sortByCardName: false};
+export const filterReducer = (state = defaultFilterReducer, action) => {
+    switch (action.type) {
+        case 'TEXT_FILTER':
+            return {
+                ...state,
+                text: action.text
+            }
+        case 'SORT_BY_STACK_NAME':
+            return {
+                ...state,
+                sortByStackName: !state.sortByStackName
+            }
+        case 'SORT_BY_CARD_NAME':
+            return {
+                ...state,
+                sortByCardName: !state.sortByCardName
+            }
+        default:
+            return state;
+    }
+}
+
 //card reducer
 const defaultCardState = [];
 export const cardReducer = (state = defaultCardState, action) => {
@@ -51,3 +75,4 @@ export const cardReducer = (state = defaultCardState, action) => {
             return state;
     }
 }
+

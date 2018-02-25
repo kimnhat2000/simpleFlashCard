@@ -5,12 +5,14 @@ import { connect } from 'react-redux';
 import { addStack, removeStack, editStack, selectStackId } from '../../Redux/actions/stackAction';
 import StackList from './StackList';
 import Warning from '../Warning';
+import Filter from '../Filter';
 
 class StackScreen extends React.Component{
     constructor(props){
         super(props);
         this.state={
             stackName:'',
+            findByName:'',
             selectedStack:null,
             warning:false,
             editInput:false,
@@ -64,7 +66,7 @@ class StackScreen extends React.Component{
         const {stackName, warning} = this.state
     }
 
-    onWarningHandle=(pass)=>{
+    onWarningHandle = (pass) => {
         if(pass){
             this.props.removeStack(this.state.selectedStack.id)
             this.setState({ warning: false })
@@ -75,7 +77,7 @@ class StackScreen extends React.Component{
     }
 
     render(){
-        const { selectedStack, stackName, warning, editInput } = this.state;
+        const { selectedStack, stackName, findByName, warning, editInput } = this.state;
         const { stacks } = this. props
         const grammarCheck = this.props.stacks.length !== 1 && 's'
         return(
@@ -94,6 +96,11 @@ class StackScreen extends React.Component{
             { stacks.length !== 0 &&
                 <h4>you are having {stacks.length} stack{grammarCheck}</h4>
             }
+
+
+                <Filter
+                    stackSort={true}
+                />
 
                 <form onSubmit={this.onFormSubmit}>
                     <h4>{this.state.error}</h4>
@@ -120,14 +127,14 @@ class StackScreen extends React.Component{
 }
 
 const mapStateToProps = (state) => ({
-    stacks:state.stacks.stacks
+    stacks: state.stacks.stacks,
 })
 
 const mapDispatchToProps = (dispatch) => ({
     addStack:(stack)=>dispatch(addStack(stack)),
     removeStack:(id)=>dispatch(removeStack(id)),
     editStack:(stack)=>dispatch(editStack(stack)),
-    selectStackId:(id)=>dispatch(selectStackId(id))
+    selectStackId:(id)=>dispatch(selectStackId(id)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(StackScreen)

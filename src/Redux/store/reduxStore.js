@@ -1,12 +1,13 @@
 import { createStore, combineReducers } from 'redux';
 
-import { stackReducer, cardReducer } from '../reducers/reducers'
+import { stackReducer, cardReducer, filterReducer } from '../reducers/reducers'
 
 export default () => {
     const store = createStore(
             combineReducers({
                 stacks: stackReducer,
-                cards: cardReducer
+                cards: cardReducer,
+                filter: filterReducer,
             })
         );
     return store;

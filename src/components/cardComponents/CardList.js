@@ -1,8 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-const CardList = ({ cards, cardClick, deleteCard, editCard, formShow }) => {
-    const list = cards.map((c,i) => (
+import { filter } from '../../tools/tools';
+
+const CardList = ({ cards, cardClick, deleteCard, editCard, formShow, cardsFilter }) => {
+    const { text, sortByCardName } = cardsFilter
+    const filteredCards = filter(cards, text, sortByCardName)
+
+    const list = filteredCards.map((c,i) => (
         <div key={i}>
             <div  
                 onClick={() => cardClick(c)}
@@ -22,4 +27,8 @@ const CardList = ({ cards, cardClick, deleteCard, editCard, formShow }) => {
     )
 }
 
-export default CardList;
+const mapStateToProps = (state) => ({
+    cardsFilter: state.filter
+})
+
+export default connect (mapStateToProps)(CardList);
