@@ -26,11 +26,12 @@ class Form extends React.Component{
         e.preventDefault();
         const { name, description } = this.state;
         const nameCheck = this.props.cards.length !== 0 && this.props.cards.map(s=>s.name.toLowerCase())
+        const editNameCheck = this.props.editCard && this.props.cards.filter(c => c.id !== this.props.editCard.id).map(c=> c.name.toLowerCase())
         if(!name){
             this.setState({error:'you must enter card name'})
             return;
         }
-        if(nameCheck.includes(name.toLowerCase())){
+        if(nameCheck && !this.props.editCard && nameCheck.includes(name.toLowerCase())){
             this.setState({error:'this card already exists'})
             return;
         }
@@ -39,6 +40,10 @@ class Form extends React.Component{
             this.props.createCard(newCard)
             this.setState({error:'', name:'', description:''})
             return;
+        }
+        if(this.props.editCard && editNameCheck.includes(name.toLowerCase())){
+            this.setState({ error: 'this card already exists' })
+            return
         }
         const editedCard = {...this.props.editCard, name, description}
         this.props.editCardSubmit(editedCard)
